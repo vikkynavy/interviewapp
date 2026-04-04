@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
@@ -24,20 +25,21 @@ public class InterviewappApplication {
     }
 
     @Bean
-    public CommandLineRunner init(UserRepository repo, PasswordEncoder encoder) {
+    public CommandLineRunner init(UserRepository repo) {
         return args -> {
             System.out.println("RUNNER STARTED"); // add this
 
-            System.out.println("BUILD CHECK: " + System.currentTimeMillis());
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            if (repo.findByEmail("test@example.com").isEmpty()) {
-                User user = new User();
-                user.setEmail("test@example.com");
-                user.setPassword(encoder.encode("password123"));
-                user.setRole(Role.USER); // adjust if needed
-                repo.save(user);
-                System.out.println("Test user created");
-            }
+            User user = new User();
+
+            user.setEmail("test@example.com");
+            user.setPassword(encoder.encode("password123"));
+            user.setRole(Role.USER);
+
+            repo.save(user);
+
+            System.out.println("FORCED USER CREATED");
         };
     }
 }
