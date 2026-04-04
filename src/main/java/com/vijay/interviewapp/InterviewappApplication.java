@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.sql.DataSource;
+import java.util.TimeZone;
+
 @SpringBootApplication
 public class InterviewappApplication {
 
@@ -21,25 +24,8 @@ public class InterviewappApplication {
 
         System.out.println("BUILD CHECK: " + System.currentTimeMillis());
 
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+
         SpringApplication.run(InterviewappApplication.class, args);
-    }
-
-    @Bean
-    public CommandLineRunner init(UserRepository repo) {
-        return args -> {
-            System.out.println("RUNNER STARTED"); // add this
-
-            PasswordEncoder encoder = new BCryptPasswordEncoder();
-
-            User user = new User();
-
-            user.setEmail("test@example.com");
-            user.setPassword(encoder.encode("password123"));
-            user.setRole(Role.USER);
-
-            repo.save(user);
-
-            System.out.println("FORCED USER CREATED");
-        };
     }
 }

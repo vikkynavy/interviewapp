@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -35,6 +37,8 @@ public class DataLoader implements CommandLineRunner {
             repo.save(user);
 
             System.out.println("✅ Test user created");
+        } else {
+            System.out.println("⚠️ User already exists");
         }
 
     }

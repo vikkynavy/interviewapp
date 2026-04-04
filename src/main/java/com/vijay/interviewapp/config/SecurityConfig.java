@@ -56,11 +56,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider) throws Exception {
 
         return http
                 .cors(cors -> {})
@@ -92,7 +89,7 @@ public class SecurityConfig {
                             response.getWriter().write("{\"error\": \"Forbidden\"}");
                         })
                 )
-                .authenticationProvider(authenticationProvider(userDetailsService))
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -102,7 +99,7 @@ public class SecurityConfig {
 
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
+        provider.setPasswordEncoder(passwordEncoder());
 
         return provider;
     }
