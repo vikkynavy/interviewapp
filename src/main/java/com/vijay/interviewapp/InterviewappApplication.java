@@ -1,7 +1,13 @@
 package com.vijay.interviewapp;
 
+import com.vijay.interviewapp.entity.Role;
+import com.vijay.interviewapp.entity.User;
+import com.vijay.interviewapp.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class InterviewappApplication {
@@ -15,4 +21,16 @@ public class InterviewappApplication {
 		SpringApplication.run(InterviewappApplication.class, args);
 	}
 
+    @Bean
+    CommandLineRunner init(UserRepository repo, PasswordEncoder encoder) {
+        return args -> {
+            if (repo.findByEmail("test@example.com").isEmpty()) {
+                User user = new User();
+                user.setEmail("test@example.com");
+                user.setPassword(encoder.encode("password123"));
+                user.setRole(Role.USER); // adjust if needed
+                repo.save(user);
+                System.out.println("Test user created");
+            }
+        };
 }
