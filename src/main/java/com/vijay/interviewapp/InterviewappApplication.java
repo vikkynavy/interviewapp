@@ -12,14 +12,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class InterviewappApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
         System.out.println("SPRING_DATASOURCE_URL=" + System.getenv("SPRING_DATASOURCE_URL"));
         System.out.println("DATABASE_URL=" + System.getenv("DATABASE_URL"));
 
 
-		SpringApplication.run(InterviewappApplication.class, args);
-	}
+        SpringApplication.run(InterviewappApplication.class, args);
+    }
 
     @Bean
     CommandLineRunner init(UserRepository repo, PasswordEncoder encoder) {
@@ -33,4 +33,5 @@ public class InterviewappApplication {
                 System.out.println("Test user created");
             }
         };
+    }
 }
