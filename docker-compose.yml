@@ -24,9 +24,9 @@ services:
     depends_on:
       - postgres
     environment:
-      DB_URL: jdbc:postgresql://postgres:5432/interviewdb
-      DB_USER: postgres
-      DB_PASSWORD: 5432
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/interviewdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 5432
     ports:
       - "8080:8080"
 
