@@ -7,10 +7,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class InterviewappApplication {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     public static void main(String[] args) {
 
@@ -22,8 +28,10 @@ public class InterviewappApplication {
     }
 
     @Bean
-    CommandLineRunner init(UserRepository repo, PasswordEncoder encoder) {
+    public CommandLineRunner init(UserRepository repo, PasswordEncoder encoder) {
         return args -> {
+            System.out.println("RUNNER STARTED"); // add this
+
             if (repo.findByEmail("test@example.com").isEmpty()) {
                 User user = new User();
                 user.setEmail("test@example.com");
