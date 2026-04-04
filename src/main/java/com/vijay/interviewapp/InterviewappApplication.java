@@ -11,7 +11,7 @@ public class InterviewappApplication {
         System.out.println("SPRING_DATASOURCE_URL=" + System.getenv("SPRING_DATASOURCE_URL"));
         System.out.println("DATABASE_URL=" + System.getenv("DATABASE_URL"));
 
-        
+
 		SpringApplication.run(InterviewappApplication.class, args);
 	}
 
