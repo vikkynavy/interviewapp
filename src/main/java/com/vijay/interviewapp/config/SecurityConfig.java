@@ -44,6 +44,8 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

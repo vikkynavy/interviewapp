@@ -18,6 +18,7 @@ public class InterviewappApplication {
         System.out.println("SPRING_DATASOURCE_URL=" + System.getenv("SPRING_DATASOURCE_URL"));
         System.out.println("DATABASE_URL=" + System.getenv("DATABASE_URL"));
 
+        System.out.println("BUILD CHECK: " + System.currentTimeMillis());
 
         SpringApplication.run(InterviewappApplication.class, args);
     }
@@ -26,6 +27,8 @@ public class InterviewappApplication {
     public CommandLineRunner init(UserRepository repo, PasswordEncoder encoder) {
         return args -> {
             System.out.println("RUNNER STARTED"); // add this
+
+            System.out.println("BUILD CHECK: " + System.currentTimeMillis());
 
             if (repo.findByEmail("test@example.com").isEmpty()) {
                 User user = new User();
