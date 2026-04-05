@@ -27,16 +27,25 @@ public class DataLoader implements CommandLineRunner {
 
         // check if user already exists
 
+        // USER (existing)
         if (repo.findByEmail("test@example.com").isEmpty()) {
-
             User user = new User();
             user.setEmail("test@example.com");
             user.setPassword(encoder.encode("password123"));
             user.setRole(Role.USER);
-
             repo.save(user);
+             System.out.println("✅ Test user created");
+        }
 
-            System.out.println("✅ Test user created");
+// ADMIN (new)
+        if (repo.findByEmail("admin@example.com").isEmpty()) {
+            User admin = new User();
+            admin.setEmail("admin@example.com");
+            admin.setPassword(encoder.encode("admin123"));
+            admin.setRole(Role.ADMIN);
+            repo.save(admin);
+
+            System.out.println("✅ admin user created");
         } else {
             System.out.println("⚠️ User already exists");
         }

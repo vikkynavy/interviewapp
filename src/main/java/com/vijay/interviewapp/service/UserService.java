@@ -1,12 +1,14 @@
 package com.vijay.interviewapp.service;
 
 import com.vijay.interviewapp.dto.CreateUserRequest;
+import com.vijay.interviewapp.dto.UpdateUserRequest;
 import com.vijay.interviewapp.dto.UserResponseDTO;
 import com.vijay.interviewapp.exception.BusinessException;
 import com.vijay.interviewapp.entity.Role;
 import com.vijay.interviewapp.entity.User;
 import com.vijay.interviewapp.repository.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -70,13 +72,14 @@ public class UserService {
     }*/
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repo) {
+    public UserService(UserRepository repo, PasswordEncoder passwordEncoder) {
         this.userRepository = repo;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll()   // ✅ missing piece
                 .stream()
@@ -98,6 +101,7 @@ public class UserService {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
 
         return userRepository.save(user);
@@ -112,13 +116,13 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User updateUser(Long id, User user) {
+    public User updateUser(Long id, UpdateUserRequest request) {
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
+        existingUser.setName(request.getName());
+        existingUser.setEmail(request.getEmail());
 
         return userRepository.save(existingUser);
     }

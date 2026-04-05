@@ -2,6 +2,7 @@ package com.vijay.interviewapp.controller;
 
 import com.vijay.interviewapp.common.ApiResponse;
 import com.vijay.interviewapp.dto.CreateUserRequest;
+import com.vijay.interviewapp.dto.UpdateUserRequest;
 import com.vijay.interviewapp.dto.UserResponseDTO;
 import com.vijay.interviewapp.entity.User;
 import com.vijay.interviewapp.service.UserService;
@@ -13,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService service;
@@ -25,27 +26,24 @@ public class UserController {
 
     @GetMapping
     public List<UserResponseDTO> getUsers() {
-        return service.getAllUsers().
-                stream()
-                .map(user -> new UserResponseDTO(
-                      user.getId(),
-                        user.getEmail(),
-                        user.getRole()
-                )).toList();
+        return service.getAllUsers();
 
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<User>> createUser(@Valid @RequestBody CreateUserRequest request) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@Valid @RequestBody CreateUserRequest request) {
         User user = service.createUser(request);
 
-        ApiResponse<User> response = new ApiResponse<>( true,
-                "User created successfully",
-                user,
-                Collections.emptyMap());
-        response.setSuccess(true);
+        UserResponseDTO dto = new UserResponseDTO(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+
+        ApiResponse<UserResponseDTO> response = new ApiResponse<>( true, "User created successfully", dto, Collections.emptyMap());
+       /* response.setSuccess(true);
         response.setMessage("User created successfully");
-        response.setData(user);
+        response.setData(dto);*/
 
         return ResponseEntity.ok(response);
     }
@@ -56,8 +54,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return service.updateUser(id, user);
+    public User updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest request) {
+        return service.updateUser(id, request);
     }
 
 
